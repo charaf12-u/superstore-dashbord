@@ -3,14 +3,9 @@ import pandas as pd
 from connectionBD.db_connection import get_engine
 from extractionDonnees.preparationDonnes import preparation
 from calculs.calculKPI import calculKPI
-from visualisations.charts import (
-    plot_ventes_par_categorie,
-    plot_ventes_par_mois,
-    plot_profit_par_region,
-    plot_top_produits,
-    plot_distribution_profits,
-    plot_top_clients
-)
+from visualisations.charts import *
+
+
 
 # --> Config Page & Custom Styling
 st.set_page_config(page_title="Dashboard Superstore", layout="wide", page_icon="📈")
