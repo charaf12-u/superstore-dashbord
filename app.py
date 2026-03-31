@@ -7,10 +7,10 @@ from visualisations.charts import *
 
 
 
-# --> Config Page & Custom Styling
+# --> Config Page 
 st.set_page_config(page_title="Dashboard Superstore", layout="wide", page_icon="📈")
 
-# --> CSS personnalisé pour un rendu plus pro (Premium UI)
+# --> CSS pour design dashboard
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
@@ -139,13 +139,13 @@ with st.sidebar:
     st.markdown("Affinez votre analyse :")
 
     regions = st.multiselect(
-        "📍 Région",
+        "REGION",
         options=sorted(df['region_name'].dropna().unique()),
         default=sorted(df['region_name'].dropna().unique())
     )
 
     categories = st.multiselect(
-        "🏷️ Catégorie",
+        "CATEGORIE",
         options=sorted(df['category_name'].dropna().unique()),
         default=sorted(df['category_name'].dropna().unique())
     )
@@ -153,7 +153,7 @@ with st.sidebar:
     annees_options = sorted(df['annee'].dropna().unique()) if 'annee' in df.columns else []
     if annees_options:
         annees = st.multiselect(
-            "📅 Année",
+            "ANNEE",
             options=annees_options,
             default=annees_options
         )
@@ -174,23 +174,76 @@ if df_filtered.empty:
 # --> KPIs et Statistiques
 kpis, stats = calculKPI(df_filtered)
 
+# --> KPIs et Statistiques
+kpis, stats = calculKPI(df_filtered)
+
 if kpis and stats:
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col1.metric("💰 Total Ventes", f"${kpis['total_sales']:,.0f}")
-    col2.metric("📈 Profit Total", f"${kpis['total_profit']:,.0f}")
-    col3.metric("📊 Marge Moyenne", f"{kpis['average_profit']:.1%}")
-    col4.metric("📦 Qtés Vendues", f"{kpis['total_quantity']:,}")
-    col5.metric("🛒 Commandes", f"{kpis['nb_commande']:,}")
+    st.markdown(f"""
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <div style="
+        display: flex;
+        background: #1a1a1a;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    ">
+        <div style="flex:1; padding:16px 22px; border-right:3px solid #CBA135;">
+            <div style="font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">
+                Total Ventes
+            </div>
+            <div style="font-family:'Permanent Marker',cursive; font-size:1.8rem; color:#CBA135;
+                text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 0 #000,3px 3px 0 #000;">
+                ${kpis['total_sales']:,.0f}
+            </div>
+        </div>
+        <div style="flex:1; padding:16px 22px; border-right:3px solid #CBA135;">
+            <div style="font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">
+                Profit Total
+            </div>
+            <div style="font-family:'Permanent Marker',cursive; font-size:1.8rem; color:#CBA135;
+                text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 0 #000,3px 3px 0 #000;">
+                ${kpis['total_profit']:,.0f}
+            </div>
+        </div>
+        <div style="flex:1; padding:16px 22px; border-right:3px solid #CBA135;">
+            <div style="font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">
+                Marge Moyenne
+            </div>
+            <div style="font-family:'Permanent Marker',cursive; font-size:1.8rem; color:#CBA135;
+                text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 0 #000,3px 3px 0 #000;">
+                {kpis['average_profit']:.1%}
+            </div>
+        </div>
+        <div style="flex:1; padding:16px 22px; border-right:3px solid #CBA135;">
+            <div style="font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">
+                Qtés Vendues
+            </div>
+            <div style="font-family:'Permanent Marker',cursive; font-size:1.8rem; color:#CBA135;
+                text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 0 #000,3px 3px 0 #000;">
+                {kpis['total_quantity']:,}
+            </div>
+        </div>
+        <div style="flex:1; padding:16px 22px;">
+            <div style="font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">
+                Commandes
+            </div>
+            <div style="font-family:'Permanent Marker',cursive; font-size:1.8rem; color:#CBA135;
+                text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 0 #000,3px 3px 0 #000;">
+                {kpis['nb_commande']:,}
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.write("") # Espace
+    st.write("")  # Espace
 
 
 # --> Graphiques - Structure en Onglets
-tab1, tab2, tab3 = st.tabs(["📈 Tendances & Ventes", "🌍 Marges & Distributions", "🏆 Top Performances"])
+tab1, tab2, tab3 = st.tabs(["TENDNCES & VENTES", "MARGES & DISTRIBUTIONS", "TOP PERFORMANCES"])
 
 with tab1:
     st.markdown("### Aperçu des Ventes")
-    row1_c1, row1_c2 = st.columns([6, 4])
+    row1_c1, row1_c2 = st.columns([5, 4])
     with row1_c1:
         st.pyplot(plot_ventes_par_mois(df_filtered), use_container_width=True)
     with row1_c2:
